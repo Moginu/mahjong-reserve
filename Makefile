@@ -1,3 +1,5 @@
+RUN_WITH_ENV := source venv/bin/activate &&
+
 .DEFAULT_GOAL := help
 
 ifeq (manage,$(firstword $(MAKECMDGOALS)))
@@ -18,9 +20,13 @@ clean:  ## remove build artifacts
 .PHONY: clean
 
 install:  ## install this package
-	source venv/bin/activate && pip install -r requirements.txt
+	$(RUN_WITH_ENV) pip install -r requirements.txt
 .PHONY: install
 
 manage: ## django's manege.py
-	source venv/bin/activate && python manage.py $(RUN_ARGS)
+	$(RUN_WITH_ENV) python manage.py $(RUN_ARGS)
 .PHONY: manage
+
+run: ## run this project
+	$(RUN_WITH_ENV) heroku local -p 12345
+.PHONY: run
